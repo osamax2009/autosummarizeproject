@@ -37,8 +37,8 @@ preprocessor, training_data, validation_data = prepare_training_data(
 )
 
 print(f"\n✓ Training data prepared:")
-print(f"  - Training samples: {len(training_data[0][0])}")
-print(f"  - Validation samples: {len(validation_data[0][0])}")
+print(f"  - Training samples: {len(training_data['encoder_input'])}")
+print(f"  - Validation samples: {len(validation_data['encoder_input'])}")
 print(f"  - Text vocabulary size: {preprocessor.vocab_size_text}")
 print(f"  - Summary vocabulary size: {preprocessor.vocab_size_summary}")
 
@@ -62,12 +62,18 @@ print("\n[Step 3/3] Training model...")
 print("This will take SEVERAL HOURS. Progress will be shown below.")
 print("="*70)
 
+# Prepare data for training (model expects specific format)
+x_train = [training_data['encoder_input'], training_data['decoder_input']]
+y_train = training_data['decoder_output']
+x_val = [validation_data['encoder_input'], validation_data['decoder_input']]
+y_val = validation_data['decoder_output']
+
 # Train with more epochs (20 instead of 10)
 history = model.train(
-    x_train=training_data[0],
-    y_train=training_data[1],
-    x_val=validation_data[0],
-    y_val=validation_data[1],
+    x_train=x_train,
+    y_train=y_train,
+    x_val=x_val,
+    y_val=y_val,
     epochs=20,  # Increased from 10
     batch_size=64,
     model_path='model_weights.h5'

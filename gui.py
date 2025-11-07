@@ -286,14 +286,14 @@ class SummarizationGUI:
             )
             self.preprocessor.load_tokenizers()
 
-            # Build and load model
+            # Build and load model with MVP parameters (matches quick_train_mvp.py)
             self.model = Seq2SeqLSTMSummarizer(
                 max_text_len=self.max_text_len,
                 max_summary_len=self.max_summary_len,
                 vocab_size_text=self.preprocessor.vocab_size_text,
                 vocab_size_summary=self.preprocessor.vocab_size_summary,
-                embedding_dim=128,
-                latent_dim=256
+                embedding_dim=64,   # MVP model uses 64 (not 128)
+                latent_dim=128      # MVP model uses 128 (not 256)
             )
 
             self.model.build_model()
