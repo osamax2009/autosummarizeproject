@@ -111,7 +111,12 @@ async function generateSummary() {
             document.getElementById('outputStats').textContent =
                 `Words: ${data.summary_length}`;
 
-            showAlert('Summary generated successfully!', 'success');
+            // Show note if provided
+            if (data.note) {
+                showAlert('✓ Summary generated. ' + data.note, 'success');
+            } else {
+                showAlert('Summary generated successfully!', 'success');
+            }
         } else {
             showAlert('Error: ' + data.error, 'error');
         }
