@@ -138,7 +138,7 @@ def load_model(self):
 print("\nSaving updated GUI configuration...")
 
 # Update the GUI file
-with open('gui.py', 'r') as f:
+with open('gui.py', 'r', encoding='utf-8') as f:
     gui_content = f.read()
 
 # Update the configuration section
@@ -149,7 +149,7 @@ gui_content = gui_content.replace('self.max_summary_len = 20', 'self.max_summary
 gui_content = gui_content.replace('embedding_dim=64,   # MVP model uses 64 (not 128)', 'embedding_dim=32,   # DEMO model for homework')
 gui_content = gui_content.replace('latent_dim=128      # MVP model uses 128 (not 256)', 'latent_dim=64       # DEMO model for homework')
 
-with open('gui.py', 'w') as f:
+with open('gui.py', 'w', encoding='utf-8') as f:
     f.write(gui_content)
 
 print("✓ GUI updated successfully!")
