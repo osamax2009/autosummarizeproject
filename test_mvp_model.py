@@ -12,21 +12,21 @@ print("="*70)
 
 # Load preprocessor
 print("\nLoading tokenizers...")
-preprocessor = DataPreprocessor(max_text_len=200, max_summary_len=20)
+preprocessor = DataPreprocessor(max_text_len=100, max_summary_len=15)  # DEMO model parameters
 preprocessor.load_tokenizers()
 
 print(f"✓ Text vocab: {preprocessor.vocab_size_text}")
 print(f"✓ Summary vocab: {preprocessor.vocab_size_summary}")
 
-# Build model with CORRECT parameters (matching training)
+# Build model with DEMO parameters (from quick_demo_train.py)
 print("\nBuilding model...")
 model = Seq2SeqLSTMSummarizer(
-    max_text_len=200,
-    max_summary_len=20,
+    max_text_len=100,
+    max_summary_len=15,
     vocab_size_text=preprocessor.vocab_size_text,
     vocab_size_summary=preprocessor.vocab_size_summary,
-    embedding_dim=64,    # MUST match training (was 64, not 128)
-    latent_dim=128       # MUST match training (was 128, not 256)
+    embedding_dim=32,    # DEMO model for homework
+    latent_dim=64        # DEMO model for homework
 )
 
 model.build_model()
@@ -59,7 +59,7 @@ summary = model.decode_sequence(
     input_seq,
     reverse_target_word_index,
     target_word_index,
-    20
+    15  # Demo model uses 15
 )
 
 print("\nGenerated Summary:")

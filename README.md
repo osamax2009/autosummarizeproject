@@ -2,14 +2,23 @@
 
 An automatic text summarization system using LSTM (Long Short-Term Memory networks) with encoder-decoder architecture and attention mechanism, trained on the CNN/DailyMail dataset.
 
+## ✨ New Features (Enhanced Version)
+
+- **📊 Training Metrics Visualization** - Interactive charts showing loss and accuracy
+- **📝 Example Text Library** - Pre-loaded examples for instant testing
+- **🎨 Tabbed Interface** - Separate tabs for summarization and metrics
+- **📈 Performance Analytics** - View model training performance
+- **🚀 Quick Launch Script** - One-command GUI startup
+
 ## Features
 
 - **Sequence-to-Sequence LSTM Model** with Bidirectional LSTM layers
 - **Attention Mechanism** for better context understanding
 - **Pre-trained on CNN/DailyMail Dataset** containing news articles and summaries
-- **User-friendly GUI** built with Tkinter
+- **Enhanced GUI** with training metrics visualization
 - **Real-time summarization** with progress indication
 - **File import/export** capabilities
+- **Training history tracking** with matplotlib charts
 
 ## Project Structure
 
@@ -38,12 +47,34 @@ pip install -r requirements.txt
 python -c "import nltk; nltk.download('stopwords')"
 ```
 
+## Quick Start
+
+### Fast Demo (Recommended for Testing)
+
+```bash
+# 1. Activate virtual environment
+source venv/bin/activate
+
+# 2. Quick training (2-3 minutes)
+python quick_demo_train.py
+
+# 3. Launch enhanced GUI
+./run_gui.sh
+# Or: python gui.py
+```
+
+See **[QUICKSTART.md](QUICKSTART.md)** for detailed instructions.
+
 ## Usage
 
 ### Step 1: Train the Model
 
-Train the model using your CNN/DailyMail dataset:
+**Option A: Quick Demo Training (2-3 minutes)**
+```bash
+python quick_demo_train.py
+```
 
+**Option B: Full Training (longer, better quality)**
 ```bash
 python train.py
 ```
@@ -75,24 +106,47 @@ After training, launch the GUI application:
 python gui.py
 ```
 
-## GUI Features
+## Enhanced GUI Features
 
-The GUI application provides:
+The enhanced GUI application provides two tabs:
 
-1. **Input Panel:**
+### Tab 1: 📝 Summarization
+1. **Example Text Buttons:**
+   - Technology News
+   - Sports Update
+   - Weather Report
+   - One-click loading for instant testing
+
+2. **Input Panel:**
    - Large text area for entering articles
    - Load text from file button
    - Clear input button
 
-2. **Output Panel:**
+3. **Output Panel:**
    - Display generated summaries
    - Copy to clipboard button
    - Save to file button
 
-3. **Controls:**
+4. **Controls:**
    - Generate Summary button
    - Real-time status updates
    - Progress indicator during generation
+
+### Tab 2: 📊 Training Metrics
+1. **Model Information:**
+   - Architecture details
+   - Vocabulary sizes
+   - Training configuration
+
+2. **Training Charts:**
+   - Loss over epochs (training vs validation)
+   - Accuracy over epochs (training vs validation)
+   - Interactive matplotlib plots
+
+3. **Performance Summary:**
+   - Final training/validation metrics
+   - Best epoch identification
+   - Accuracy percentages
 
 ## Model Architecture
 
@@ -150,22 +204,32 @@ python gui.py
 - `model_weights.h5`: Trained model weights
 - `x_tokenizer.pickle`: Input text tokenizer
 - `y_tokenizer.pickle`: Summary tokenizer
+- `training_history.pickle`: **NEW** - Training metrics for visualization
 
-**Important:** All three files are required for the GUI to work!
+**Important:** All files are required for full GUI functionality!
 
 ## Troubleshooting
 
+**Issue: "Shape mismatch" error when loading model**
+- Solution: ✅ **FIXED** - GUI now uses correct parameters (embedding_dim=32, latent_dim=64)
+
 **Issue: "Model not found" error**
-- Solution: Train the model first using `python train.py`
+- Solution: Train the model first using `python quick_demo_train.py`
+
+**Issue: "matplotlib not found" error**
+- Solution: `source venv/bin/activate && pip install matplotlib`
 
 **Issue: Out of memory during training**
 - Solution: Reduce `--sample_size` or `--batch_size`
 
 **Issue: Training is too slow**
-- Solution: Use smaller sample size or enable GPU acceleration
+- Solution: Use `quick_demo_train.py` for fast 2-3 minute training
 
 **Issue: Poor quality summaries**
 - Solution: Train for more epochs or use larger dataset
+
+**Issue: No training metrics showing**
+- Solution: Delete old model files and retrain to generate `training_history.pickle`
 
 ## Technical Details
 
@@ -181,7 +245,14 @@ python gui.py
 - Pandas
 - NumPy
 - NLTK
+- Matplotlib (for training charts)
 - Tkinter (usually included with Python)
+
+## Documentation
+
+- **[QUICKSTART.md](QUICKSTART.md)** - Quick start guide and common workflows
+- **[CHANGES.md](CHANGES.md)** - Detailed list of all enhancements and fixes
+- **[run_gui.sh](run_gui.sh)** - Convenient launcher script
 
 ## License
 

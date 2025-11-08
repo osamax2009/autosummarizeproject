@@ -1,50 +1,46 @@
 #!/bin/bash
-# Launcher script for the Text Summarization GUI
-# This script tries different Python installations to find one that works
 
-echo "Text Summarization GUI Launcher"
-echo "================================"
+# Run GUI Script for Text Summarization
+# This script activates the virtual environment and launches the GUI
+
+echo "=========================================="
+echo "  Text Summarization GUI Launcher"
+echo "=========================================="
 echo ""
 
-# Try to find a working Python installation
-PYTHON_CMDS=(
-    "/opt/homebrew/bin/python3.13"
-    "/opt/homebrew/bin/python3"
-    "/usr/local/bin/python3"
-    "/usr/bin/python3"
-    "python3"
-    "python"
-)
+# Check if virtual environment exists
+if [ ! -d "venv" ]; then
+    echo "❌ Error: Virtual environment not found!"
+    echo "Please create it first with: python3 -m venv venv"
+    exit 1
+fi
 
-for CMD in "${PYTHON_CMDS[@]}"; do
-    if command -v "$CMD" &> /dev/null; then
-        echo "Testing: $CMD"
+# Activate virtual environment
+echo "🔧 Activating virtual environment..."
+source venv/bin/activate
 
-        # Check if required modules are available
-        if $CMD -c "import tkinter, tensorflow, pandas, numpy" 2>/dev/null; then
-            echo "✓ Found working Python: $CMD"
-            echo ""
-            echo "Starting GUI..."
-            echo ""
-            exec $CMD gui.py
-        else
-            echo "  Missing required modules"
-        fi
-    fi
-done
+# Check if matplotlib is installed
+python -c "import matplotlib" 2>/dev/null
+if [ $? -ne 0 ]; then
+    echo "📦 Installing matplotlib..."
+    pip install matplotlib
+fi
+
+# Check if model exists
+if [ ! -f "model_weights.h5" ]; then
+    echo ""
+    echo "⚠️  Warning: Model not found!"
+    echo "Please train the model first by running:"
+    echo "  python quick_demo_train.py"
+    echo ""
+    read -p "Press Enter to continue anyway (GUI will show warning)..."
+fi
+
+# Launch GUI
+echo ""
+echo "🚀 Launching Enhanced GUI..."
+echo ""
+python gui.py
 
 echo ""
-echo "ERROR: Could not find a Python installation with all required packages."
-echo ""
-echo "Please install the requirements using ONE of these methods:"
-echo ""
-echo "1. If you have a virtual environment, activate it:"
-echo "   source venv/bin/activate"
-echo "   python gui.py"
-echo ""
-echo "2. Install packages with pip (if allowed):"
-echo "   pip3 install -r requirements.txt"
-echo "   python3 gui.py"
-echo ""
-echo "3. Use the Python that trained your model (check setup/train logs)"
-echo ""
+echo "✅ GUI closed."

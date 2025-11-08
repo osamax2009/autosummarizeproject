@@ -471,14 +471,11 @@ Total Training Epochs: {len(history.get('loss', []))}"""
         final_train_acc = history['accuracy'][-1] * 100
         final_val_acc = history['val_accuracy'][-1] * 100
 
-        # Find best epoch (lowest validation loss)
-        best_epoch = history['val_loss'].index(min(history['val_loss'])) + 1
-
         self.metrics_text.config(state=tk.NORMAL)
         self.metrics_text.delete("1.0", tk.END)
         metrics_summary = f"""Final Training Loss: {final_train_loss:.4f}  |  Final Validation Loss: {final_val_loss:.4f}
 Final Training Accuracy: {final_train_acc:.2f}%  |  Final Validation Accuracy: {final_val_acc:.2f}%
-Best Epoch: {best_epoch} (based on lowest validation loss)"""
+Best Epoch: {history['loss'].index(min(history['val_loss'])) + 1} (based on lowest validation loss)"""
         self.metrics_text.insert("1.0", metrics_summary)
         self.metrics_text.config(state=tk.DISABLED)
 

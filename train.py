@@ -4,6 +4,7 @@ Training script for LSTM-based text summarization model
 
 import os
 import argparse
+import pickle
 from data_preprocessing import prepare_training_data
 from model import Seq2SeqLSTMSummarizer
 import warnings
@@ -85,11 +86,18 @@ def train_model(train_path='train.csv',
         model_path=model_save_path
     )
 
+    # Save training history
+    print("\nSaving training history...")
+    with open('training_history.pickle', 'wb') as f:
+        pickle.dump(history.history, f)
+    print("Training history saved to: training_history.pickle")
+
     print("\n" + "=" * 70)
     print("TRAINING COMPLETED!")
     print("=" * 70)
     print(f"\nModel weights saved to: {model_save_path}")
     print(f"Tokenizers saved to: x_tokenizer.pickle and y_tokenizer.pickle")
+    print(f"Training history saved to: training_history.pickle")
     print("\nYou can now use the GUI to generate summaries!")
     print("Run: python gui.py")
     print("=" * 70)
