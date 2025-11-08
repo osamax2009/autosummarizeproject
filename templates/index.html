@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LSTM Text Summarization</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>🤖 LSTM Text Summarization</h1>
+            <p class="subtitle">AI-Powered Automatic Text Summarization with Training Metrics</p>
+            <div class="status-badge" id="statusBadge">
+                <span class="status-dot"></span>
+                <span id="statusText">Loading...</span>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('summarize')">
+                📝 Summarization
+            </button>
+            <button class="tab-btn" onclick="switchTab('metrics')">
+                📊 Training Metrics
+            </button>
+            <button class="tab-btn" onclick="switchTab('about')">
+                ℹ️ About
+            </button>
+        </div>
+
+        <!-- Tab: Summarization -->
+        <div id="summarize-tab" class="tab-content active">
+            <!-- Example Texts -->
+            <div class="examples-section">
+                <h3>📚 Try Example Texts</h3>
+                <div class="example-buttons">
+                    {% for example in examples %}
+                    <button class="example-btn" onclick="loadExample('{{ example.id }}')">
+                        {{ example.title }}
+                    </button>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Main Summarization Area -->
+            <div class="summarization-grid">
+                <!-- Input Panel -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3>Input Text</h3>
+                        <div class="panel-actions">
+                            <button class="btn-secondary" onclick="clearInput()">Clear</button>
+                        </div>
+                    </div>
+                    <textarea id="inputText"
+                              class="text-area"
+                              placeholder="Paste your text here or click an example above..."
+                              rows="12"></textarea>
+                    <div class="text-stats">
+                        <span id="inputStats">Words: 0</span>
+                    </div>
+                </div>
+
+                <!-- Output Panel -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3>Generated Summary</h3>
+                        <div class="panel-actions">
+                            <button class="btn-secondary" onclick="copySummary()">Copy</button>
+                        </div>
+                    </div>
+                    <div id="outputText" class="text-area output-area">
+                        <p class="placeholder">Your summary will appear here...</p>
+                    </div>
+                    <div class="text-stats">
+                        <span id="outputStats">Words: 0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Generate Button -->
+            <div class="action-section">
+                <button id="generateBtn" class="btn-primary" onclick="generateSummary()">
+                    <span class="btn-text">Generate Summary</span>
+                    <span class="btn-loader" style="display: none;">⏳ Generating...</span>
+                </button>
+            </div>
+
+            <!-- Alert Area -->
+            <div id="alertArea"></div>
+        </div>
+
+        <!-- Tab: Training Metrics -->
+        <div id="metrics-tab" class="tab-content">
+            <!-- Model Info -->
+            <div class="info-panel">
+                <h3>Model Information</h3>
+                <div id="modelInfo" class="model-info-grid">
+                    <p>Loading model information...</p>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="charts-grid">
+                <div class="chart-panel">
+                    <h3>Training & Validation Loss</h3>
+                    <canvas id="lossChart"></canvas>
+                </div>
+                <div class="chart-panel">
+                    <h3>Training & Validation Accuracy</h3>
+                    <canvas id="accuracyChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Metrics Summary -->
+            <div class="metrics-summary" id="metricsSummary">
+                <p>Loading training metrics...</p>
+            </div>
+        </div>
+
+        <!-- Tab: About -->
+        <div id="about-tab" class="tab-content">
+            <div class="about-section">
+                <h2>About This Project</h2>
+
+                <div class="about-card">
+                    <h3>🎯 Features</h3>
+                    <ul>
+                        <li><strong>Seq2Seq LSTM Architecture</strong> with Bidirectional layers</li>
+                        <li><strong>Attention Mechanism</strong> for better context understanding</li>
+                        <li><strong>Real-time Summarization</strong> with web interface</li>
+                        <li><strong>Training Metrics Visualization</strong> with interactive charts</li>
+                        <li><strong>Example Texts</strong> for instant testing</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>🏗️ Model Architecture</h3>
+                    <ul>
+                        <li><strong>Embedding Dimension:</strong> 32</li>
+                        <li><strong>Latent Dimension:</strong> 64</li>
+                        <li><strong>Max Text Length:</strong> 100 tokens</li>
+                        <li><strong>Max Summary Length:</strong> 15 tokens</li>
+                        <li><strong>Dataset:</strong> CNN/DailyMail</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3>🚀 How to Use</h3>
+                    <ol>
+                        <li>Click on an example text or paste your own</li>
+                        <li>Click "Generate Summary" button</li>
+                        <li>View the AI-generated summary</li>
+                        <li>Check "Training Metrics" tab to see model performance</li>
+                    </ol>
+                </div>
+
+                <div class="about-card">
+                    <h3>📊 Training Details</h3>
+                    <p>
+                        This model uses a sequence-to-sequence LSTM architecture with attention mechanism.
+                        The encoder processes the input text through bidirectional LSTM layers, while the
+                        decoder generates the summary word-by-word using attention to focus on relevant
+                        parts of the input.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Built with TensorFlow, Keras, and Flask | LSTM Text Summarization</p>
+        </footer>
+    </div>
+
+    <!-- Example Texts Data -->
+    <script>
+        const exampleTexts = {
+            {% for example in examples %}
+            '{{ example.id }}': `{{ example.text }}`,
+            {% endfor %}
+        };
+    </script>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
